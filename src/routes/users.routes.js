@@ -3,9 +3,8 @@ const UserControllers = require("../controllers/UserController");
 const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 const UserAvatarController = require("../controllers/UserAvatarController");
 
-const multer =  require("multer");
 const uploadconfig = require("../configs/upload");
-
+const multer = require("multer");
 const upload = multer(uploadconfig.MULTER);
 
 const userAvatarController = new UserAvatarController();
@@ -15,5 +14,5 @@ const usersRoutes = Router();
 
 usersRoutes.post("/", userControllers.create);
 usersRoutes.put("/", ensureAuthenticated, userControllers.update);
-usersRoutes.patch("/avatar", ensureAuthenticated, userAvatarController.update);
+usersRoutes.patch("/avatar", ensureAuthenticated, upload.single("avatar"), userAvatarController.update);
 module.exports = usersRoutes;

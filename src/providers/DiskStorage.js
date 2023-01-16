@@ -1,24 +1,24 @@
-const fs = require("fs"); //manipução de arquivos
+const fs = require("fs");
 const path = require("path");
-const uploadConfig = require("../configs/upload");
+const uploadconfig = require("../configs/upload");
 
 class DiskStorage {
   async saveFile(file) {
     await fs.promises.rename(
-      path.resolve(uploadConfig.TMP_FOLDER, file),
-      path.resolve(uploadConfig.UPLOAD_FOLDER, file)
+      path.resolve(uploadconfig.TMP_FOLDER, file),
+      path.resolve(uploadconfig.UPLOADS_FOLDER,  file)
     );
 
     return file;
   }
 
   async deleteFile(file) {
-    const filePath = path.resolve(uploadConfig.UPLOAD_FOLDER, file);
+    const filePath = path.resolve(uploadconfig.UPLOADS_FOLDER, file);
 
     try {
       await fs.promises.stat(filePath);
     } catch {
-      return
+      return;
     }
 
     await fs.promises.unlink(filePath);
