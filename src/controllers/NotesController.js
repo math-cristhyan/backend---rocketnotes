@@ -35,7 +35,7 @@ class NotesController {
   }
 
   async show(request, response) {
-    const id = request.params;
+    const { id } = request.params;
 
     const note = await knex("notes").where({id}).first();
     const tags = await knex("tags").where({note_id: id}).orderBy("name");
@@ -65,7 +65,6 @@ class NotesController {
       const filterTags = tags.split(',').map(tag => tag.trim());
 
       notes = await knex("tags")
-      console.log(tags)
         .select([
           "notes.id",
           "notes.title",
@@ -75,6 +74,7 @@ class NotesController {
         .whereLike("notes.title", `%${title}%`)
         .whereIn("name", filterTags)
         .innerJoin("notes", "notes.id", "tags.note_id")
+        .groupBy("notes.id")
         .orderBy("notes.title")
     }
 
@@ -99,4 +99,4 @@ class NotesController {
   }
 }
 
-module.exports = NotesController; 
+module.exports = NotesController;
